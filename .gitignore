@@ -7,6 +7,11 @@
 node_modules/
 dist/
 
+#vscode folder
+/.vscode/*
+# Compiled files .o files
+*.o 
+
 # Compiled Java class files
 *.class
 
