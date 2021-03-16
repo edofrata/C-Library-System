@@ -14,12 +14,12 @@ class Book
 
 private:
     // declaring variables
-    std::string title, authors, isbn;
+    std::string title, authors, isbn; 
     int quantity;
 
 public:
     // constructor
-    Book(std::string title_, std::string authors_, std::string isbn_, int quantity_)
+    Book(std::string title_, std::string authors_, std::string isbn_,  int quantity_)
     {
 
         title = title_;

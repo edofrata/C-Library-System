@@ -5,28 +5,28 @@ std::vector<std::string> Book::string_splitter(std::string line, std::string del
 {
     std::vector<std::string> vector_strings;
     std::string word;
-    size_t index = 0;
+    size_t pos = 0;
 
-    do
+    while ((pos = line.find(delimeter)) != std::string::npos)
     {
-        word = line.substr(0, index);
+        word = line.substr(0, pos);
 
         vector_strings.push_back(word);
 
-        line.erase(0, index + delimeter.length());
-    } while ((index = line.find(delimeter)) != std::string::npos);
+        line.erase(0, pos + delimeter.length());
+    } 
 
     // adding to the vector the string passed
     vector_strings.push_back(line);
     return vector_strings;
 }
+
 // ------------------------- File reader ---------------------------------
 void Book::file_reader()
 {
 
     std::string file;
     std::string line;
-    bool new_file = false;
 
     // --------------Asking for the file desired ---------------------
     std::cout << "\nTo exit type ====> 0" << std::endl;
@@ -43,19 +43,22 @@ void Book::file_reader()
         }
         else
         {
-            if (library.is_open() || new_file)
+            if (library.is_open())
             {
                 while (std::getline(library, line))
                 {
                     line.c_str();
                     if (line != "")
                     {
-                // splitting the data by the tab which in ASCII is (9)
+                        // splitting the data by the tab which in ASCII is (9)
                         std::vector<std::string> data = string_splitter(line, std::string(1, 9));
-                //    Creating the object
-                        Book Book(data[0], data[1], data[2], std::stoul(data[3]));
+                        //    Creating the object
+                        Book Book(data[0], data[1], data[2], stoi(data[3]));
+
+                        std::cout << "Title: " << data[2] << std::endl;
                     }
                 }
+                std::cout << "\nSuccessfully Imported!" << std::endl;
                 library.close();
 
                 break;

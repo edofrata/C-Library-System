@@ -21,4 +21,3 @@ library_methods.o : library_methods.cpp library.hpp
 clean :
 	rm *.o
 	rm library_main
-	# rm music_shop_test
