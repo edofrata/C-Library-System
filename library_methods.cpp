@@ -1,7 +1,9 @@
 #include "library.hpp"
 
+#include <fstream>
+#include <limits>
 // ------------------ Splitting the string -------------------------
-std::vector<std::string> Book::string_splitter(std::string line, std::string delimeter)
+std::vector<std::string> Data::string_splitter(std::string line, std::string delimeter)
 {
     std::vector<std::string> vector_strings;
     std::string word;
@@ -14,7 +16,7 @@ std::vector<std::string> Book::string_splitter(std::string line, std::string del
         vector_strings.push_back(word);
 
         line.erase(0, pos + delimeter.length());
-    } 
+    }
 
     // adding to the vector the string passed
     vector_strings.push_back(line);
@@ -22,7 +24,7 @@ std::vector<std::string> Book::string_splitter(std::string line, std::string del
 }
 
 // ------------------------- File reader ---------------------------------
-void Book::file_reader()
+void Data::file_reader()
 {
 
     std::string file;
@@ -53,9 +55,8 @@ void Book::file_reader()
                         // splitting the data by the tab which in ASCII is (9)
                         std::vector<std::string> data = string_splitter(line, std::string(1, 9));
                         //    Creating the object
-                        Book Book(data[0], data[1], data[2], stoi(data[3]));
-
-                        std::cout << "Title: " << data[2] << std::endl;
+                        book_data.push_back(Book(data[0], data[1], data[2], stoi(data[3])));
+                        book_data.shrink_to_fit();
                     }
                 }
                 std::cout << "\nSuccessfully Imported!" << std::endl;
@@ -65,10 +66,54 @@ void Book::file_reader()
             }
             else if (library.fail())
             {
-                std::cout << "File not found! Please Try Again!" << std::endl;
+                std::cout << "\nFILE NOT FOUND! PLEASE TRY AGAIN!" << std::endl;
                 file_reader();
                 break;
             }
         }
+    }
+}
+
+void Data::start()
+{
+
+    int choice;
+
+    std::cout << "\nAdding New Book ----------------> 1" << std::endl;
+    std::cout << "Increase Book Quantity ---------> 2" << std::endl;
+    std::cout << "Decrement Book Quantity --------> 3" << std::endl;
+    std::cout << "Exit ---------------------------> 0" << std::endl;
+    std::cout << "\nPlease insert your choice:> ";
+
+    std::cin >> choice;
+
+    if(std::cin.fail())
+    {
+        std::cin.clear();
+        std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+        std::cout << "\nWRONG FROMAT!" << std::endl;
+        start();
+    } 
+
+    switch (choice)
+    {
+
+    case 0:
+        std::cout << "\nSuccessfully Exited!" << std::endl;
+        std::exit(1);
+        break;
+    case 1:
+        // adding new Book method
+
+        break;
+    case 2:
+        // Increasing Books Quantity method
+
+        break;
+
+    case 3:
+        // Decreasing Book Quantity
+
+        break;
     }
 }
