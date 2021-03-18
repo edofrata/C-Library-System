@@ -7,6 +7,9 @@
 #include <string>
 #include <vector>
 #include <deque>
+#include <regex>
+
+ 
 
 // declaring the classes needed
 class Book
@@ -26,6 +29,7 @@ public:
         authors = authors_;
         isbn = isbn_;
         quantity = quantity_;
+
     }
 
     Book(){};
@@ -44,13 +48,19 @@ public:
     // --------------------------------------------------------
 };
 
-class Data
+class Utilities
 {
 
 public:
-    // reading file method
-    void file_reader();
-    void start();
+    
+    void file_reader();// reading file method
+    void start(); //where the main menu is
+    std::string toLowerCase(std::string); //ToLowerCase method which will be needed when searching for a string
+    
+    void adding_newBook(); //method which adds a new book to the data structure
+    void increase_Books(); //method which increases the Books quantity
+    void decrease_Books(); //method which decreases the books quantity
+    
     std::vector<std::string> string_splitter(std::string line, std::string delimeter);
     // deque of objects which will store all the books
     std::deque<Book> book_data;
