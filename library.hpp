@@ -4,12 +4,12 @@
 
 // defining standard library
 #include <iostream>
+#include <random>  
 #include <string>
 #include <vector>
 #include <deque>
+#include <chrono>
 #include <regex>
-
- 
 
 // declaring the classes needed
 class Book
@@ -29,7 +29,6 @@ public:
         authors = authors_;
         isbn = isbn_;
         quantity = quantity_;
-
     }
 
     Book(){};
@@ -52,25 +51,34 @@ class Utilities
 {
 
 public:
-    
-    void file_reader();// reading file method
-    void start(); //where the main menu is
+    void file_reader();                   // reading file method
+    void start();                         //where the main menu is
     std::string toLowerCase(std::string); //ToLowerCase method which will be needed when searching for a string
-    
+
     void adding_newBook(); //method which adds a new book to the data structure
     void increase_Books(); //method which increases the Books quantity
     void decrease_Books(); //method which decreases the books quantity
-    
+
+
+    // partition method
+    template <class T>
+    int partition(T &data, int left, int right);
+    // Sorting method
+    template <class T>
+    void quick_sorting(T &data, int left, int right);
+
     std::vector<std::string> string_splitter(std::string line, std::string delimeter);
     // deque of objects which will store all the books
     std::deque<Book> book_data;
-
+    
+    
 protected:
-// ----------------- SETTER METHODS --------------------------
+   
+    // ----------------- SETTER METHODS --------------------------
     // Setting the new book
     void set_newBook(std::string title, std::string authors, std::string isbn, int quantity)
     {
-        book_data.push_back(Book (title, authors, isbn, quantity));
+        book_data.push_back(Book(title, authors, isbn, quantity));
     }
     // incresing quantity of the book
 
@@ -81,9 +89,9 @@ protected:
     // Removing the book
     void set_decrementBook(int index, int quantity)
     {
-         book_data.at(index).get_quantity() - quantity;
+        book_data.at(index).get_quantity() - quantity;
     }
-// ----------------------------------------------------------   
+    // ----------------------------------------------------------
 };
 
 #endif

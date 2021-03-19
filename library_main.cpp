@@ -7,12 +7,17 @@ int main()
     Utilities util;
 
     util.file_reader();
-    util.start();
+    // util.start();
 
-    // --------------------------- TEST ------------------------------------------
-    std::cout << "Title:             " << util.book_data.at(419).get_title() << std::endl;
-    std::cout << "Author's:          " << util.book_data.at(419).get_authors() << std::endl;
-    std::cout << "ISBN:              " << util.book_data.at(419).get_isbn() << std::endl;
-    std::cout << "Quantity:          " << util.book_data.at(419).get_quantity() << std::endl;
-    std::cout << "Size of the deque: " << util.book_data.size() << std::endl;
+// --------------------------- TEST ------------------------------------------
+    printf("Sorted array: \n");
+    for(int i =0; i < util.book_data.size() ; i ++){
+
+        std::cout<< i << "   " << util.book_data[i].get_title() << std::endl; 
+
+    }
+
+//    std::cout << "\n\n THE SIZE IS: " << n << std::endl;
+
+
 }
