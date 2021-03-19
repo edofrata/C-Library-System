@@ -18,9 +18,11 @@ class Book
 private:
     // declaring variables
     std::string title, authors, isbn;
-    int quantity;
+    
 
 public:
+
+    int quantity;
     // constructor
     Book(std::string title_, std::string authors_, std::string isbn_, int quantity_)
     {
@@ -44,6 +46,8 @@ public:
 
     // method which returns the quantity
     int get_quantity() { return quantity; }
+
+    // void setQty(int num);
     // --------------------------------------------------------
 };
 
@@ -53,25 +57,34 @@ class Utilities
 public:
     void file_reader();                   // reading file method
     void start();                         //where the main menu is
-    std::string toLowerCase(std::string); //ToLowerCase method which will be needed when searching for a string
+    void print_books();                    //printing all the books
 
+
+// -------------------- Book Methods ------------------------
     void adding_newBook(); //method which adds a new book to the data structure
     void increase_Books(); //method which increases the Books quantity
-    void decrease_Books(); //method which decreases the books quantity
+    void decreasement_Books(); //method which decreases the books quantity
+    void searching_book(); //searching for a book
+// ----------------------------------------------------------
 
-
+// ------------------ ALGORITHM TECHNIQUES-----------------------------
     // partition method
     template <class T>
     int partition(T &data, int left, int right);
     // Sorting method
     template <class T>
     void quick_sorting(T &data, int left, int right);
-
+    // searching method
+    void search(std::string);
+    
+// ---------------------------------------------------------------------
+    std::string toLowerCase(std::string); //ToLowerCase method which will be needed when searching for a string
     std::vector<std::string> string_splitter(std::string line, std::string delimeter);
     // deque of objects which will store all the books
     std::deque<Book> book_data;
-    
-    
+    int total;
+    bool exit = false;
+
 protected:
    
     // ----------------- SETTER METHODS --------------------------
@@ -84,12 +97,20 @@ protected:
 
     void set_quantityBook(int index, int quantity)
     {
-        book_data.at(index).get_quantity() + quantity;
+        int total = book_data.at(index).get_quantity() + quantity;
+        
+        book_data.at(index).quantity = total;
+
     }
+
     // Removing the book
-    void set_decrementBook(int index, int quantity)
+    int set_decrementBook(int index, int quantity)
     {
-        book_data.at(index).get_quantity() - quantity;
+        total = book_data.at(index).get_quantity() - quantity;
+        
+        book_data.at(index).quantity = total;
+
+        return total;
     }
     // ----------------------------------------------------------
 };

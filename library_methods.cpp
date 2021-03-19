@@ -35,6 +35,7 @@ void Utilities::start()
 
     case 0:
         std::cout << "\nSUCCESSFULLY EXITED!" << std::endl;
+        exit = true;
         std::exit(1);
         break;
     case 1:
@@ -43,15 +44,15 @@ void Utilities::start()
         break;
     case 2:
         // Increasing Books Quantity method
-
+        increase_Books();
         break;
     case 3:
         // Decreasing Book Quantity
-
+        decreasement_Books();
         break;
     case 4:
         // searching title method
-
+        searching_book();
     default:
         std::cout << "\nTHERE IS NO SUCH CHOICE! PLEASE, TRY AGAIN!" << std::endl;
         start();
@@ -118,6 +119,88 @@ void Utilities::adding_newBook()
         adding_newBook();
         break;
     }
+}
+// --------------------------- Increase Book quantity Method -----------------------
+void Utilities::increase_Books(){
+    int quantity;
+    int index;
+    print_books();
+
+    std::cout << "\nPlease insert the Book index:> ";
+    std::cin >> index;
+
+    std::cout << "|||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||" << std::endl;
+    std::cout <<"\nYou have chosen: " << std::endl;
+    std::cout << "Title: " << book_data.at(index - 1).get_title() << std::endl;
+    std::cout << "Author(s): " << book_data.at(index - 1).get_authors() << std::endl;
+    std::cout << "ISBN: " << book_data.at(index - 1).get_isbn() << std::endl;
+    std::cout << "Quantity: " << book_data.at(index - 1).get_quantity() << std::endl;
+
+    std::cout << "Please Insert The incresement:> ";
+    std::cin >> quantity;
+
+    set_quantityBook(index - 1, quantity);
+
+    std::cout << book_data.at(index - 1).get_title() << " " << "Has Been incremented of: " << quantity << std::endl;
+    std::cout << "|||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||" << std::endl;
+    std::cout <<"\nAfter Increment: " << std::endl;
+    std::cout << "Title: " << book_data.at(index - 1).get_title() << std::endl;
+    std::cout << "Author(s): " << book_data.at(index - 1).get_authors() << std::endl;
+    std::cout << "ISBN: " << book_data.at(index - 1).get_isbn() << std::endl;
+    std::cout << "Quantity: " << book_data.at(index - 1).get_quantity() << std::endl;
+
+
+}
+// ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+// --------------------------- DECREASE Book quantity Method -----------------------
+void Utilities::decreasement_Books(){
+
+    int quantity;
+    int index;
+    print_books();
+
+    std::cout << "\nPlease insert the Book index:> ";
+    std::cin >> index;
+
+    std::cout << "|||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||" << std::endl;
+    std::cout <<"\nYou have chosen: " << std::endl;
+    std::cout << "Title: " << book_data.at(index - 1).get_title() << std::endl;
+    std::cout << "Author(s): " << book_data.at(index - 1).get_authors() << std::endl;
+    std::cout << "ISBN: " << book_data.at(index - 1).get_isbn() << std::endl;
+    std::cout << "Quantity: " << book_data.at(index - 1).get_quantity() << std::endl;
+
+    std::cout << "Please Insert The incresement:> ";
+    std::cin >> quantity;
+
+    set_decrementBook(index - 1, quantity);
+
+    if(total <=0){
+
+        book_data.erase(book_data.begin() + (index - 1));
+        std::cout << "Has been Deleted " << std::endl;
+        print_books();
+    }else{
+
+    std::cout << book_data.at(index - 1).get_title() << " " << "Has Been incremented of: " << quantity << std::endl;
+    std::cout << "|||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||" << std::endl;
+    std::cout <<"\nAfter Increment: " << std::endl;
+    std::cout << "Title: " << book_data.at(index - 1).get_title() << std::endl;
+    std::cout << "Author(s): " << book_data.at(index - 1).get_authors() << std::endl;
+    std::cout << "ISBN: " << book_data.at(index - 1).get_isbn() << std::endl;
+    std::cout << "Quantity: " << book_data.at(index - 1).get_quantity() << std::endl;
+
+    }
+
+}
+
+//------------------------------ searching book -----------------------------
+void Utilities::searching_book(){
+
+
+
+
+
+
 }
 // -----------------------------------------------------------------
 // |||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
@@ -196,13 +279,26 @@ void Utilities::file_reader()
             }
         }
     }
-    
+
 // shuffle of vector, in case the data structure is already sorted, in order to not affect the quick sort performance
     unsigned seed = std::chrono::system_clock::now().time_since_epoch().count();
     std::shuffle (book_data.begin(), book_data.end(), std::default_random_engine(seed));
 // sorting the entire data structure
     quick_sorting(book_data, 0, book_data.size() - 1);
-    
+
+  
+
+}
+
+void Utilities::print_books(){
+
+
+    for(int i = 0; i < book_data.size(); i ++){
+
+     std::cout << "| " << i + 1 << "| " << book_data.at(i).get_title() << std::endl;
+
+    }
+
 }
 // |||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
 // ----------------toLowerCase method -------------------------
@@ -270,4 +366,13 @@ void Utilities::quick_sorting(T &data, int left, int right) {
 
         quick_sorting(data, pivot, right);
     }
+}
+
+// ----------------------------- Searchong for a string ------------------
+void Utilities::search(std::string){
+
+
+
+
+
 }
