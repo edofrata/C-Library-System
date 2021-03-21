@@ -55,7 +55,6 @@ void Utilities::start()
         searching_book();
     default:
         std::cout << "\nTHERE IS NO SUCH CHOICE! PLEASE, TRY AGAIN!" << std::endl;
-        start();
         break;
     }
 }
@@ -126,9 +125,13 @@ void Utilities::increase_Books(){
     int index;
     print_books();
 
+
+    std::cout << "\nTo go back type ====> 0" << std::endl;
     std::cout << "\nPlease insert the Book index:> ";
     std::cin >> index;
-
+  if(index == 0){
+        start();
+    }else{
     std::cout << "|||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||" << std::endl;
     std::cout <<"\nYou have chosen: " << std::endl;
     std::cout << "Title: " << book_data.at(index - 1).get_title() << std::endl;
@@ -149,7 +152,7 @@ void Utilities::increase_Books(){
     std::cout << "ISBN: " << book_data.at(index - 1).get_isbn() << std::endl;
     std::cout << "Quantity: " << book_data.at(index - 1).get_quantity() << std::endl;
 
-
+    }
 }
 // ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
 // --------------------------- DECREASE Book quantity Method -----------------------
@@ -159,9 +162,13 @@ void Utilities::decreasement_Books(){
     int index;
     print_books();
 
+    std::cout << "\nTo go back type ====> 0" << std::endl;
     std::cout << "\nPlease insert the Book index:> ";
     std::cin >> index;
 
+    if(index == 0){
+        start();
+    }else{
     std::cout << "|||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||" << std::endl;
     std::cout <<"\nYou have chosen: " << std::endl;
     std::cout << "Title: " << book_data.at(index - 1).get_title() << std::endl;
@@ -179,6 +186,7 @@ void Utilities::decreasement_Books(){
         book_data.erase(book_data.begin() + (index - 1));
         std::cout << "Has been Deleted " << std::endl;
         print_books();
+
     }else{
 
     std::cout << book_data.at(index - 1).get_title() << " " << "Has Been incremented of: " << quantity << std::endl;
@@ -189,18 +197,35 @@ void Utilities::decreasement_Books(){
     std::cout << "ISBN: " << book_data.at(index - 1).get_isbn() << std::endl;
     std::cout << "Quantity: " << book_data.at(index - 1).get_quantity() << std::endl;
 
+        }
     }
-
 }
 
 //------------------------------ searching book -----------------------------
 void Utilities::searching_book(){
 
+    std::string book_title;
+
+    unsigned seed = std::chrono::system_clock::now().time_since_epoch().count();
+    std::shuffle (book_data.begin(), book_data.end(), std::default_random_engine(seed));
+    quick_sorting(book_data, 0, book_data.size() - 1, 0);
+
+    std::cout << "\nTo exit type ====> 0" << std::endl;
+    std::cout<< "\nWhich book would you like to search?" << std::endl;
+    std::cout << "Please insert the word:> ";
+    std::cin.ignore();
+    std::getline(std::cin, book_title);
 
 
-
-
-
+    if(book_title.empty()){
+        
+        std::cout << "YOU NEED TO INSERT A WORD!" << std::endl;
+    }else if(book_title == "0"){
+        start();
+    }
+//    calling the search, which will evaluate the rest
+    search(book_data,book_title);
+    start();
 }
 // -----------------------------------------------------------------
 // |||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
@@ -284,7 +309,7 @@ void Utilities::file_reader()
     unsigned seed = std::chrono::system_clock::now().time_since_epoch().count();
     std::shuffle (book_data.begin(), book_data.end(), std::default_random_engine(seed));
 // sorting the entire data structure
-    quick_sorting(book_data, 0, book_data.size() - 1);
+    quick_sorting(book_data, 0, book_data.size() - 1, 0);
 
   
 
@@ -315,14 +340,11 @@ std::string Utilities::toLowerCase(std::string word)
 // |||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
 
 // --------------------------- QUICK SORTING ALGORITHM -------------------------------
-
-// ------ Placing the last element as pivot, which places smaller to left and greater to right (of pivot) -----------------
-template <class T>
-int Utilities::partition(T &data, int left, int right) {
-    Utilities util;
+int Utilities::partition(std::deque<Book> &data, int left, int right, int index) {
+     Utilities util;
     int pivot = left + (right - left) / 2; //getting the pivot location
 
-    std::string pivot_word = util.toLowerCase(data[pivot].get_title()); //retrieving the pivot word
+    std::string pivot_word = toLowerCase(string_splitter(data[pivot].get_title(), " ")[index]); //retrieving the pivot word
 
     int i = left, j = right;
 
@@ -331,15 +353,9 @@ int Utilities::partition(T &data, int left, int right) {
 
     while(i <= j) {
         // while the left word is less than the pivot word will increase i
-        while(util.toLowerCase(data[i].get_title()) < pivot_word) {
-
-            i++;
-        }
+        while(toLowerCase(string_splitter(data[i].get_title(), " ")[index]) < pivot_word) { i++; }
         // when it exits it will check the right node if is greater than the pivot word
-        while(util.toLowerCase(data[j].get_title()) > pivot_word) {
-
-            j--;
-        }
+        while(toLowerCase(string_splitter(data[j].get_title(), " ")[index]) > pivot_word) { j--; }
 // finally it check if i is less or equal to j and if it is will swap them 
         if(i <= j) {
             temp = data[i];
@@ -351,28 +367,120 @@ int Utilities::partition(T &data, int left, int right) {
     }
     return i;
 }
-
 // -------------------- Sorting the Data structure Method -----------------
-template <class T>
-void Utilities::quick_sorting(T &data, int left, int right) {
+void Utilities::quick_sorting(std::deque<Book> &data, int left, int right, int index) {
 
 // when the left node(first index) will be greater than the right node (last one)
 // it will finish the sorting
     if(left < right) {
 
-        int pivot= partition(data, left, right);
+        int pivot= partition(data, left, right, index);
 
-        quick_sorting(data, left, pivot- 1);
-
-        quick_sorting(data, pivot, right);
+        quick_sorting(data, left, pivot - 1, index);
+        quick_sorting(data, pivot, right, index);
     }
 }
 
-// ----------------------------- Searchong for a string ------------------
-void Utilities::search(std::string){
+// ----------------------------- Searching for a string ------------------
+void Utilities::search(std::deque<Book> data, std::string word){
+    
+
+    unsigned long int left=0, right= data.size();
+
+    int i = -1;
+    while(++i >= 0){
+// ---------------------------------------------------------------------
+ 
+        quick_sorting(data, 0, data.size() - 1, i);
+        // for(Book d: data){ std::cout << d.get_title() << std::endl; }
+// -----------------------------------------------------------------------
+
+        // std::cout << "\nGRANDE CICLO " << i << std::endl;
+        bool nextWord = false;
+
+        // ----------------START--------------------
+        std::function<bool( int left, int right)> recur = [&]( int l, int r){
+            unsigned long long mid = l + (r - l) / 2;
+            std::deque<std::string> titles_found;
+            
+            std::string title = string_splitter(data[mid].get_title(), " ").size() >i? string_splitter(data.at(mid).get_title(), " ")[i]: "";
+            nextWord = title != "" ? true : nextWord;
+
+            // std::cout << "\n\nTITLE " << title << std::endl;
+            if (toLowerCase(word)< toLowerCase(title) ){
+            // needs to cut the right node and go to the left
+            // std::cout << "\nVALUE OF R: " << l << std::endl;
+                if(r != left && r != mid){
+                    r = mid;
+                    return recur(l, r);
+                }
+            }
+            else if(toLowerCase(word) > toLowerCase(title)){
+            // needs to cut the left node and go to the right
+                // std::cout << "\nVALUE OF L: " << l << std::endl;
+                if(l != right - 1 && l != mid){ 
+                    l = mid;  
+                    return recur(l, r);
+                }
+            }else{
+
+                std::cout << "WORDS FOUND: " << std::endl;
+                std::cout   << "\nThe word searched: "  << word         << " "
+                            << "\n\nThe words Found: " << "\n\n"<< mid << " " << data[mid].get_title() << std::endl;
+                // storing the mid value
+                unsigned long long temp_mid = mid;
+                // checking if first there are words alike
+
+                while(toLowerCase(word) == toLowerCase(string_splitter(data.at(mid--).get_title(), " ")[i])){
+
+                    std::cout << mid << " "<< data[mid].get_title() << std::endl;
+   
+                }
+//Reassigning the mid value 
+                mid = temp_mid;
+
+               while(toLowerCase(word) == toLowerCase(string_splitter(data.at(mid++).get_title(), " ")[i])){
+                   
+                   std::cout << mid << " "<< data[mid].get_title() << std::endl;
+
+               }
+                
+                
+                    return false;
+                
+            }
+            while(i == 0){
+                std::cout << "\nTHE WORD HAS NOT BEEN FOUND! "<< std::endl;
+                std::cout << "Would you like to search further?? "<< std::endl;
+                std::cout << "Yes -----> 1"<< std::endl;
+                std::cout << "No  -----> 0"<< std::endl << std::endl;
+                std::cout << "Please insert choice:> ";
+
+                //user input
+                std::string choice; std::cin >> choice;
+                std::cout << std::endl;
+
+                if(choice == "1"){
+                    return true;
+                }else if(choice == "0"){
+                    return false;
+                }else{ std::cout << "Wrong selection! Try again."<< std::endl; }
+            }
+
+            if(!nextWord){
+                std::cout << "Not found! "<< std::endl;
+                return false;
+            }
+            return true;
+        };
 
 
+        if(!recur(left, right)){ return; }else{
 
+            std::cout << "\nTHE WORD HAS NOT BEEN FOUND" << std::endl;
+            return;
+        }
+    }
 
 
 }

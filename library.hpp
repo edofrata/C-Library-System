@@ -69,13 +69,11 @@ public:
 
 // ------------------ ALGORITHM TECHNIQUES-----------------------------
     // partition method
-    template <class T>
-    int partition(T &data, int left, int right);
+    int partition(std::deque<Book> &data, int left, int right, int index);
     // Sorting method
-    template <class T>
-    void quick_sorting(T &data, int left, int right);
+    void quick_sorting(std::deque<Book> &data, int left, int right, int index);
     // searching method
-    void search(std::string);
+    void search(std::deque<Book> data, std::string word);
     
 // ---------------------------------------------------------------------
     std::string toLowerCase(std::string); //ToLowerCase method which will be needed when searching for a string
