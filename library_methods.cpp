@@ -123,9 +123,10 @@ void Utilities::adding_newBook()
 void Utilities::increase_Books(){
     int quantity;
     int index;
+    encapsulated_sorting(book_data);
     print_books();
 
-
+    
     std::cout << "\nTo go back type ====> 0" << std::endl;
     std::cout << "\nPlease insert the Book index:> ";
     std::cin >> index;
@@ -160,8 +161,9 @@ void Utilities::decreasement_Books(){
 
     int quantity;
     int index;
+    encapsulated_sorting(book_data);
     print_books();
-
+   
     std::cout << "\nTo go back type ====> 0" << std::endl;
     std::cout << "\nPlease insert the Book index:> ";
     std::cin >> index;
@@ -206,8 +208,7 @@ void Utilities::searching_book(){
 
     std::string book_title;
 
-    unsigned seed = std::chrono::system_clock::now().time_since_epoch().count();
-    std::shuffle (book_data.begin(), book_data.end(), std::default_random_engine(seed));
+    
     quick_sorting(book_data, 0, book_data.size() - 1, 0);
 
     std::cout << "\nTo exit type ====> 0" << std::endl;
@@ -224,7 +225,7 @@ void Utilities::searching_book(){
         start();
     }
 //    calling the search, which will evaluate the rest
-    search(book_data,book_title);
+    search(&book_data,book_title);
     start();
 }
 // -----------------------------------------------------------------
@@ -263,6 +264,7 @@ void Utilities::file_reader()
     std::string line;
 
     // --------------Asking for the file desired ---------------------
+    std::cout << "\nWELCOME TO THE LIBRARY SYSTEM!" << std::endl;
     std::cout << "\nTo exit type ====> 0" << std::endl;
     std::cout << "Please insert the file desired:> ";
     std::cin >> file;
@@ -305,15 +307,22 @@ void Utilities::file_reader()
         }
     }
 
+    encapsulated_sorting(book_data);
+    print_books();
+}
+
+// ---------------------- ENCAPSULATED SORTING -------------------------
+std::deque<Book> Utilities::encapsulated_sorting(std::deque<Book>& data){
+    
 // shuffle of vector, in case the data structure is already sorted, in order to not affect the quick sort performance
     unsigned seed = std::chrono::system_clock::now().time_since_epoch().count();
-    std::shuffle (book_data.begin(), book_data.end(), std::default_random_engine(seed));
+    std::shuffle (data.begin(), data.end(), std::default_random_engine(seed));
 // sorting the entire data structure
-    quick_sorting(book_data, 0, book_data.size() - 1, 0);
+    quick_sorting(data, 0, data.size() - 1, 0);
 
-  
-
+    return data;
 }
+// ----------------------------------------------------------------------
 
 void Utilities::print_books(){
 
@@ -337,150 +346,213 @@ std::string Utilities::toLowerCase(std::string word)
                    [](unsigned char c) { return std::tolower(c); });
     return word;
 }
-// |||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
 
-// --------------------------- QUICK SORTING ALGORITHM -------------------------------
-int Utilities::partition(std::deque<Book> &data, int left, int right, int index) {
-     Utilities util;
-    int pivot = left + (right - left) / 2; //getting the pivot location
+// // |||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
 
-    std::string pivot_word = toLowerCase(string_splitter(data[pivot].get_title(), " ")[index]); //retrieving the pivot word
 
-    int i = left, j = right;
+void Utilities::quick_sorting(std::deque<Book>& data, long int left, long int right, unsigned int index){
+    std::string pivot;
 
-// creating a holder
-    Book temp;
+    //--------------------------- Recursive Functiomn -----------------------------------
+    std::function<void(std::deque<Book>& data, long int l, long int r)> quick_sort = [&](std::deque<Book>& data, long int left, long int right){
+        pivot = "";
+        long int pivot_index = (left + right) / 2 ;
+        long int i = left, j = right;
+        
+        std::vector<std::string> pivot_word = string_splitter(data[pivot_index].get_title(), " ");   // vector for pivot words
+         if(index < pivot_word.size() ){
+                for (std::vector<std::string>::const_iterator iterator_pivot = pivot_word.begin()+ index; iterator_pivot != pivot_word.end(); ++iterator_pivot) 
+                    { pivot += " " + *iterator_pivot; }
+                }    
+        // -------- creating a holder for partioning word ----------
+        while (i <= j) {
+            // creating a holder for object
+            Book* temp = new Book(data[i]);   
+            
+            i--;
+            j++;
+            std::string right_word, left_word;
+            // -------------- STARTING LEFT SIDE CHECK ------------------------
+            do
+            {
+                left_word = "";
+                std::vector<std::string>* vector_leftWord = new std::vector<std::string>(string_splitter(data[++i].get_title(), " "));   
+                if(index < (*vector_leftWord).size()){
+                for (std::vector<std::string>::const_iterator iterator_left = (*vector_leftWord).begin()+ index; iterator_left != (*vector_leftWord).end(); ++iterator_left) 
+                    { left_word += " " + *iterator_left; }
+                }
 
-    while(i <= j) {
-        // while the left word is less than the pivot word will increase i
-        while(toLowerCase(string_splitter(data[i].get_title(), " ")[index]) < pivot_word) { i++; }
-        // when it exits it will check the right node if is greater than the pivot word
-        while(toLowerCase(string_splitter(data[j].get_title(), " ")[index]) > pivot_word) { j--; }
-// finally it check if i is less or equal to j and if it is will swap them 
-        if(i <= j) {
-            temp = data[i];
-            data[i] = data[j];
-            data[j] = temp;
-            i++;
-            j--;
+                 delete vector_leftWord; //releasing memory
+            } while (toLowerCase(left_word)  < toLowerCase(pivot));
+
+            //------------------ STARTING RIGHT SIDE CHECK --------------------
+            do
+            {
+                right_word = "";
+                std::vector<std::string>* vector_rightWord = new std::vector<std::string>(string_splitter(data[--j].get_title(), " "));     // vector for right words
+                 if(index < (*vector_rightWord).size()){
+                for (std::vector<std::string>::const_iterator iterator_right = (*vector_rightWord).begin()+ index; iterator_right != (*vector_rightWord).end(); ++iterator_right) 
+                    { right_word += " " + *iterator_right; }
+
+                 }
+                 
+                  delete vector_rightWord; //realising memory
+            } while (toLowerCase(right_word) > toLowerCase(pivot));
+
+            if (i <= j) 
+            { 
+                (*temp) = data[i];
+                data[i] = data[j];
+                data[j] = *temp;
+                i++; 
+                j--;
+               
+            } 
+            delete temp; //releasing memory as I do not need the holder anymore
         }
-    }
-    return i;
+        // ---------- Recall to the quick sorting --------
+        if (left < j ){ quick_sort(data, left, j );}
+        if (i < right){ quick_sort(data, i, right); }
+    };
+    quick_sort(data,left,right);
+    
 }
-// -------------------- Sorting the Data structure Method -----------------
-void Utilities::quick_sorting(std::deque<Book> &data, int left, int right, int index) {
-
-// when the left node(first index) will be greater than the right node (last one)
-// it will finish the sorting
-    if(left < right) {
-
-        int pivot= partition(data, left, right, index);
-
-        quick_sorting(data, left, pivot - 1, index);
-        quick_sorting(data, pivot, right, index);
-    }
-}
-
-// ----------------------------- Searching for a string ------------------
-void Utilities::search(std::deque<Book> data, std::string word){
+// ------------------------------------------------------------------------
+// ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+// -----------------BINARY SEARCH TREE IMPLEMENTATION----------------------
+std::deque<Book> Utilities::search(std::deque<Book>* data, std::string word){
     
 
-    unsigned long int left=0, right= data.size();
+    unsigned long int left=0, right= (*data).size();
 
-    int i = -1;
-    while(++i >= 0){
-// ---------------------------------------------------------------------
- 
-        quick_sorting(data, 0, data.size() - 1, i);
-        // for(Book d: data){ std::cout << d.get_title() << std::endl; }
-// -----------------------------------------------------------------------
+    std::deque<Book> titles_found;//pointing to the memory of "data"
 
-        // std::cout << "\nGRANDE CICLO " << i << std::endl;
-        bool nextWord = false;
+
+    int i = -1, next_index = 0, count_cycles;
+    while(++i >= 0 && next_index != -1){
+        next_index = -1;
+
+// ------- shuffling the data structure in case the list given is already in order -----------
+        unsigned seed = std::chrono::system_clock::now().time_since_epoch().count();
+        std::shuffle (book_data.begin(), book_data.end(), std::default_random_engine(seed));
+// -------------------------------------------------------------------------------------------
+        quick_sorting((*data), 0, (*data).size() - 1, i);
 
         // ----------------START--------------------
-        std::function<bool( int left, int right)> recur = [&]( int l, int r){
-            unsigned long long mid = l + (r - l) / 2;
-            std::deque<std::string> titles_found;
-            
-            std::string title = string_splitter(data[mid].get_title(), " ").size() >i? string_splitter(data.at(mid).get_title(), " ")[i]: "";
-            nextWord = title != "" ? true : nextWord;
+        std::function<bool( int left, int right)> binary_search = [&]( int l, int r){
 
-            // std::cout << "\n\nTITLE " << title << std::endl;
+            unsigned long int mid = l + (r - l) / 2;
+            std::string title = string_splitter((*data)[mid].get_title(), " ").size() > i ? string_splitter((*data).at(mid).get_title(), " ")[i]: "";
+            next_index = title != "" ? i : next_index;
+
             if (toLowerCase(word)< toLowerCase(title) ){
             // needs to cut the right node and go to the left
-            // std::cout << "\nVALUE OF R: " << l << std::endl;
                 if(r != left && r != mid){
                     r = mid;
-                    return recur(l, r);
+                    return binary_search(l, r);
                 }
             }
             else if(toLowerCase(word) > toLowerCase(title)){
             // needs to cut the left node and go to the right
-                // std::cout << "\nVALUE OF L: " << l << std::endl;
+
                 if(l != right - 1 && l != mid){ 
                     l = mid;  
-                    return recur(l, r);
+                    return binary_search(l, r);
                 }
             }else{
-
-                std::cout << "WORDS FOUND: " << std::endl;
-                std::cout   << "\nThe word searched: "  << word         << " "
-                            << "\n\nThe words Found: " << "\n\n"<< mid << " " << data[mid].get_title() << std::endl;
                 // storing the mid value
-                unsigned long long temp_mid = mid;
+                unsigned long int* temp_mid = new unsigned long int(mid);
+          
+                if(toLowerCase(word) == toLowerCase(title)){
+                    std::cout   << "WORDS FOUND: "         << std::endl;
+                    std::cout   << "\nThe word searched: " << word  << " "
+                                << "\n\nThe words Found: " << std::endl;
+
                 // checking if first there are words alike
-
-                while(toLowerCase(word) == toLowerCase(string_splitter(data.at(mid--).get_title(), " ")[i])){
-
-                    std::cout << mid << " "<< data[mid].get_title() << std::endl;
-   
+                while(toLowerCase(word) == toLowerCase(string_splitter((*data).at(mid).get_title(), " ")[i])){
+                    titles_found.push_front((*data)[mid]);
+                    // making sure that it does not go out of bounds
+                    if(mid > 0){ --mid; }
+                    else       { break; }            
                 }
-//Reassigning the mid value 
-                mid = temp_mid;
+                //Reassigning the mid value 
+                mid = *temp_mid;
+                delete temp_mid;//releasing memory 
 
-               while(toLowerCase(word) == toLowerCase(string_splitter(data.at(mid++).get_title(), " ")[i])){
-                   
-                   std::cout << mid << " "<< data[mid].get_title() << std::endl;
-
+                // checking the word if equal by incrementing after mid
+                while(toLowerCase(word) == toLowerCase(string_splitter((*data).at(++mid).get_title(), " ")[i]) ){
+                   titles_found.push_back((*data)[mid]);
                }
+            
                 
+                int counter = 1;
+                std::cout << "\n\n" << "LIST PRINTED OUT: " << std::endl;
+                for(auto book : titles_found){ std::cout << counter << " " << book.get_title() << std::endl; counter++; }
                 
-                    return false;
+                count_cycles = i == 0 ? titles_found.size() : count_cycles;
+                return true;
                 
+             }
+            
             }
-            while(i == 0){
-                std::cout << "\nTHE WORD HAS NOT BEEN FOUND! "<< std::endl;
-                std::cout << "Would you like to search further?? "<< std::endl;
-                std::cout << "Yes -----> 1"<< std::endl;
-                std::cout << "No  -----> 0"<< std::endl << std::endl;
-                std::cout << "Please insert choice:> ";
-
-                //user input
-                std::string choice; std::cin >> choice;
-                std::cout << std::endl;
-
-                if(choice == "1"){
-                    return true;
-                }else if(choice == "0"){
-                    return false;
-                }else{ std::cout << "Wrong selection! Try again."<< std::endl; }
-            }
-
-            if(!nextWord){
-                std::cout << "Not found! "<< std::endl;
-                return false;
-            }
-            return true;
+            
+            return false;
         };
 
 
-        if(!recur(left, right)){ return; }else{
+        if(!binary_search(left,right) && i == 0){
+            std::cout << "\nTHE WORD HAS NOT BEEN FOUND! " << std::endl;
+            std::cout << "Would you like to search further?? "<< std::endl;
+            std::cout << "Yes -----> 1"<< std::endl;
+            std::cout << "No  -----> 0"<< std::endl << std::endl;
+            std::cout << "Please insert choice:> ";
 
-            std::cout << "\nTHE WORD HAS NOT BEEN FOUND" << std::endl;
-            return;
+     
+            std::string choice = "";
+            while(choice != "1" && choice != "0"){
+                std::cin >> choice; // user input 
+
+                if(choice != "1" && choice != "0"){
+
+                    std::cout << "WRONG INPUT!" << std::endl; // in case the input is wrong
+                    
+                }
+            }
+            if(choice == "0"){ break; }
+        }else if(titles_found.size() > 0){
+            
+            if(next_index == 0 && i == 0){
+            
+                std::cout << "\r\n" << "\nNOT WHAT YOU WERE LOOKING FOR?" << std::endl;
+                std::cout << "Search Further ----> 1";
+                std::cout<< "\nGo Back        ----> 0";
+                std::cout << "\n\nPlease insert your choice:> ";
+                //user choice
+                std::string choice = "";
+                while(choice != "1" && choice != "0"){           
+                    std::cin >> choice;
+                    if(choice != "1" && choice != "0"){
+                        
+                         std::cout << "WRONG INPUT!" << std::endl; 
+                         
+                         }
+                }
+                if( choice == "0" ){ start(); }
+            }else if( next_index == -1 ){
+                if(titles_found.size() > count_cycles){
+
+                    std::cout << "\r\n" << "FOUND " << std::to_string(titles_found.size() - count_cycles) << " MORE" << std::endl;
+
+                }else{ std::cout << "\r\n" << "NOT MORE WORDS WERE FOUND!"; }
+                break;
+            }
+        }else if(next_index == -1){
+            
+            std::cout << "DEFINITELY NOT FOUND!";
+            break;
         }
     }
-
-
+    // delete data;
+    return titles_found;
+  
 }

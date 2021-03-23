@@ -69,12 +69,14 @@ public:
 
 // ------------------ ALGORITHM TECHNIQUES-----------------------------
     // partition method
-    int partition(std::deque<Book> &data, int left, int right, int index);
+    int partition(std::deque<Book>& data, int left, int right, int index);
     // Sorting method
-    void quick_sorting(std::deque<Book> &data, int left, int right, int index);
+    void quick_sorting(std::deque<Book>& data, long int left, long int right, unsigned int index);
     // searching method
-    void search(std::deque<Book> data, std::string word);
+    std::deque<Book> search(std::deque<Book> *data, std::string word);
     
+    // sorting method encapsulated with shuffling
+    std::deque<Book>  encapsulated_sorting(std::deque<Book>& data);
 // ---------------------------------------------------------------------
     std::string toLowerCase(std::string); //ToLowerCase method which will be needed when searching for a string
     std::vector<std::string> string_splitter(std::string line, std::string delimeter);
