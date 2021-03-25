@@ -77,6 +77,7 @@ public:
     
     // sorting method encapsulated with shuffling
     std::deque<Book>  encapsulated_sorting(std::deque<Book>& data);
+    std::deque<Book> titles_found; //WHere the found books will finish
 // ---------------------------------------------------------------------
     std::string toLowerCase(std::string); //ToLowerCase method which will be needed when searching for a string
     std::vector<std::string> string_splitter(std::string line, std::string delimeter);
@@ -84,7 +85,9 @@ public:
     std::deque<Book> book_data;
     int total;
     bool exit = false;
+    
 
+ 
 protected:
    
     // ----------------- SETTER METHODS --------------------------
@@ -95,20 +98,21 @@ protected:
     }
     // incresing quantity of the book
 
-    void set_quantityBook(int index, int quantity)
+    int set_quantityBook(std::deque<Book>& data, int index, int &quantity)
     {
-        int total = book_data.at(index).get_quantity() + quantity;
+        int total = data.at(index).get_quantity() + quantity;
         
-        book_data.at(index).quantity = total;
+        data.at(index).quantity = total;
 
+        return total;
     }
 
     // Removing the book
-    int set_decrementBook(int index, int quantity)
+    int set_decrementBook(std::deque<Book>& data,int index, int &quantity)
     {
-        total = book_data.at(index).get_quantity() - quantity;
+        total = data.at(index).get_quantity() - quantity;
         
-        book_data.at(index).quantity = total;
+        data.at(index).quantity = total;
 
         return total;
     }
