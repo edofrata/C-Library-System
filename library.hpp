@@ -77,12 +77,13 @@ public:
     
     // sorting method encapsulated with shuffling
     std::deque<Book>  encapsulated_sorting(std::deque<Book>& data);
-    std::deque<Book> titles_found; //WHere the found books will finish
+   
 // ---------------------------------------------------------------------
     std::string toLowerCase(std::string); //ToLowerCase method which will be needed when searching for a string
     std::vector<std::string> string_splitter(std::string line, std::string delimeter);
     // deque of objects which will store all the books
     std::deque<Book> book_data;
+     std::deque<Book>* titles_found = new std::deque<Book>(book_data); //WHere the found books will finish
     int total;
     bool exit = false;
     

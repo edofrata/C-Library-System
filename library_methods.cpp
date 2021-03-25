@@ -137,12 +137,12 @@ void Utilities::increase_Books(){
         start();
     }else{
             search(&book_data, word);
-            unsigned int max_size = titles_found.size();
+            unsigned int max_size = (*titles_found).size();
     if(max_size > 0){
             std::cout << "\nPlease Insert the book:> ";
             std::cin >> index;
 
-        while(index > max_size){
+        while(index > max_size || index <= 0 ){
             std::cout << "THERE IS NOT SUCH INDEX!" << std::endl;
             std::cout << "\nPlease Insert the book:> ";
             std::cin >> index;
@@ -150,10 +150,10 @@ void Utilities::increase_Books(){
 
         std::cout << "|||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||"  << std::endl;
         std::cout <<"\nYOU HAVE CHOSEN: " << std::endl;
-        std::cout << "Title:      " << titles_found.at(index - 1).get_title()    << std::endl;
-        std::cout << "Author(s):  " << titles_found.at(index - 1).get_authors()  << std::endl;
-        std::cout << "ISBN:       " << titles_found.at(index - 1).get_isbn()     << std::endl;
-        std::cout << "Quantity:   " << titles_found.at(index - 1).get_quantity() << std::endl;
+        std::cout << "Title:      " << (*titles_found).at(index - 1).get_title()    << std::endl;
+        std::cout << "Author(s):  " << (*titles_found).at(index - 1).get_authors()  << std::endl;
+        std::cout << "ISBN:       " << (*titles_found).at(index - 1).get_isbn()     << std::endl;
+        std::cout << "Quantity:   " << (*titles_found).at(index - 1).get_quantity() << std::endl;
         std::cout << "\n|||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||" << std::endl;
         // checking if the quantity inserted increses
         std::cout << "\nPlease Insert The incresement:> ";
@@ -165,15 +165,15 @@ void Utilities::increase_Books(){
 
     }
 
-    set_quantityBook(titles_found, index - 1, quantity);
+    set_quantityBook((*titles_found), index - 1, quantity);
 
     std::cout << "\n|||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||" << std::endl;
-    std::cout << titles_found.at(index).get_title() << " " << "Has Been incremented of: " << quantity << std::endl;
+    std::cout << (*titles_found).at(index).get_title() << " " << "Has Been incremented of: " << quantity << std::endl;
     std::cout <<"\nAFTER INCREMENT: " << std::endl;
-    std::cout << "Title:      " << titles_found.at(index - 1).get_title()    << std::endl;
-    std::cout << "Author(s):  " << titles_found.at(index - 1).get_authors()  << std::endl;
-    std::cout << "ISBN:       " << titles_found.at(index - 1).get_isbn()     << std::endl;
-    std::cout << "Quantity:   " << titles_found.at(index - 1).get_quantity() << std::endl;
+    std::cout << "Title:      " << (*titles_found).at(index - 1).get_title()    << std::endl;
+    std::cout << "Author(s):  " << (*titles_found).at(index - 1).get_authors()  << std::endl;
+    std::cout << "ISBN:       " << (*titles_found).at(index - 1).get_isbn()     << std::endl;
+    std::cout << "Quantity:   " << (*titles_found).at(index - 1).get_quantity() << std::endl;
     std::cout << "\n|||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||" << std::endl;
 
     }else{
@@ -221,14 +221,14 @@ void Utilities::decreasement_Books(){
     }else{
 
             search(&book_data, word);
-            unsigned int max_size = titles_found.size();
+            unsigned int max_size = (*titles_found).size();
 
     if(max_size > 0){
 
             std::cout << "\nPlease Insert the book:> ";
             std::cin >> index;
             
-        while(index > max_size){
+        while(index > max_size || index <= 0 ){
             std::cout << "THERE IS NOT SUCH INDEX!" << std::endl;
             std::cout << "\nPlease Insert the book:> ";
             std::cin >> index;
@@ -236,10 +236,10 @@ void Utilities::decreasement_Books(){
 
     std::cout << "|||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||" << std::endl;
     std::cout <<"\nYou have chosen: " << std::endl;
-    std::cout << "Title:      " << titles_found.at(index - 1).get_title()    << std::endl;
-    std::cout << "Author(s):  " << titles_found.at(index - 1).get_authors()  << std::endl;
-    std::cout << "ISBN:       " << titles_found.at(index - 1).get_isbn()     << std::endl;
-    std::cout << "Quantity:   " << titles_found.at(index - 1).get_quantity() << std::endl;
+    std::cout << "Title:      " << (*titles_found).at(index - 1).get_title()    << std::endl;
+    std::cout << "Author(s):  " << (*titles_found).at(index - 1).get_authors()  << std::endl;
+    std::cout << "ISBN:       " << (*titles_found).at(index - 1).get_isbn()     << std::endl;
+    std::cout << "Quantity:   " << (*titles_found).at(index - 1).get_quantity() << std::endl;
     std::cout << "\n|||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||" << std::endl;
 
     std::cout << "Please Insert The decresement:> ";
@@ -252,7 +252,7 @@ void Utilities::decreasement_Books(){
 
     }
 
-    set_decrementBook(titles_found, index - 1, quantity);
+    set_decrementBook((*titles_found), index - 1, quantity);
 
     if(total <=0){
 
@@ -264,10 +264,10 @@ void Utilities::decreasement_Books(){
     std::cout << book_data.at(index - 1).get_title() << " " << "Has Been decremented of: " << quantity << std::endl;
     std::cout << "|||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||" << std::endl;
     std::cout <<"\nAfter decrement:   " << std::endl;
-    std::cout << "Title:      " << titles_found.at(index - 1).get_title()    << std::endl;
-    std::cout << "Author(s):  " << titles_found.at(index - 1).get_authors()  << std::endl;
-    std::cout << "ISBN:       " << titles_found.at(index - 1).get_isbn()     << std::endl;
-    std::cout << "Quantity:   " << titles_found.at(index - 1).get_quantity() << std::endl;
+    std::cout << "Title:      " << (*titles_found).at(index - 1).get_title()    << std::endl;
+    std::cout << "Author(s):  " << (*titles_found).at(index - 1).get_authors()  << std::endl;
+    std::cout << "ISBN:       " << (*titles_found).at(index - 1).get_isbn()     << std::endl;
+    std::cout << "Quantity:   " << (*titles_found).at(index - 1).get_quantity() << std::endl;
 
         }
     }else{
@@ -519,7 +519,7 @@ std::deque<Book> Utilities::search(std::deque<Book>* data, std::string word){
 
     unsigned long int left=0, right= (*data).size();
     // std::unordered_map<std::string, Book> books_found; //Unordered hash map which will hold the books found
-    titles_found.clear(); //clearing from the old list
+    (*titles_found).clear(); //clearing from the old list
     
 
     int i = -1, next_index = 0, count_cycles;
@@ -563,7 +563,7 @@ std::deque<Book> Utilities::search(std::deque<Book>* data, std::string word){
 
                 // checking if first there are words alike
                 while(toLowerCase(word) == toLowerCase(string_splitter((*data).at(mid).get_title(), " ")[i])){
-                    titles_found.push_front((*data)[mid]);
+                    (*titles_found).push_front((*data)[mid]);
                     // making sure that it does not go out of bounds
                     if(mid > 0){ --mid; }
                     else       { break; }            
@@ -572,7 +572,7 @@ std::deque<Book> Utilities::search(std::deque<Book>* data, std::string word){
                 
                 // checking the word if equal by incrementing after mid
                 while(toLowerCase(word) == toLowerCase(string_splitter((*data).at(++(*temp_mid)).get_title(), " ")[i]) ){
-                   titles_found.push_back((*data)[*temp_mid]);
+                   (*titles_found).push_back((*data)[*temp_mid]);
 
                 }
 
@@ -601,9 +601,9 @@ std::deque<Book> Utilities::search(std::deque<Book>* data, std::string word){
                 delete temp_mid;//releasing memory 
                 int counter = 1;
                 std::cout  << "LIST PRINTED OUT: " << std::endl;
-                for(auto book : titles_found){ std::cout << counter << " " << book.get_title() << std::endl; counter++; }
+                for(auto book : (*titles_found)){ std::cout << counter << " " << book.get_title() << std::endl; counter++; }
                 
-                count_cycles = i == 0 ? titles_found.size() : count_cycles;
+                count_cycles = i == 0 ? (*titles_found).size() : count_cycles;
                 return true;
                 
              }
@@ -632,7 +632,7 @@ std::deque<Book> Utilities::search(std::deque<Book>* data, std::string word){
                 }
             }
             if(choice == "0"){ break; }
-        }else if(titles_found.size() > 0){
+        }else if((*titles_found).size() > 0){
             
             if(next_index == 0 && i == 0){
             
@@ -649,11 +649,11 @@ std::deque<Book> Utilities::search(std::deque<Book>* data, std::string word){
                     if(choice != "1" && choice != "0")
                     std::cout << "\nWRONG INPUT, TRY AGAIN!" <<std::endl;  
                 }
-                if( choice == "1" ){ return titles_found; }
+                if( choice == "1" ){ return (*titles_found); }
             }else if( next_index == -1 ){
-                if(titles_found.size() > count_cycles){
+                if((*titles_found).size() > count_cycles){
 
-                    std::cout << "\nI HAVE FOUND " << std::to_string(titles_found.size() - count_cycles) << " MORE" << std::endl;
+                    std::cout << "\nI HAVE FOUND " << std::to_string((*titles_found).size() - count_cycles) << " MORE" << std::endl;
 
                 }else{ std::cout << "\nNOT MORE WORDS WERE FOUND!"; }
                 break;
@@ -664,7 +664,7 @@ std::deque<Book> Utilities::search(std::deque<Book>* data, std::string word){
             break;
         }
     }
-    return titles_found;
+    return (*titles_found);
   
 }
 
