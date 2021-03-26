@@ -523,9 +523,6 @@ void Utilities::quick_sorting(std::deque<Book*>& data, long int left, long int r
                 j--;
                
             } 
-
-            // delete temp; //releasing memory as I do not need the holder anymore
-
         }
         // ---------- Recall to the quick sorting --------
         if (left < j ){ quick_sort(data, left, j );}
@@ -542,11 +539,11 @@ std::deque<Book*> Utilities::search(std::deque<Book*>& data, std::string word){
  
     std::function<std::string(long long mid, unsigned int index)> retrieve_title = [&](long long mid, unsigned int index){
         std::string book_title = "";
-        
+
         std::vector<std::string> splitted = string_splitter((*data[mid]).get_title(), " ");
 
-        if(index < (splitted).size()){
-            for (std::vector<std::string>::const_iterator it = (splitted).begin()+index; it != (splitted).end(); ++it){ book_title += (*it) + " "; }
+        if(index < splitted.size()){
+            for (std::vector<std::string>::const_iterator it = splitted.begin() + index; it != splitted.end(); ++it){ book_title += (*it) + " "; }
         }
         return toLowerCase(book_title.substr(0, word.size()));
     };
@@ -554,7 +551,7 @@ std::deque<Book*> Utilities::search(std::deque<Book*>& data, std::string word){
     unsigned long int left=0, right= data.size();
     std::unordered_map<std::string, Book*> books_found; //Unordered hash map which will hold the books found
     titles_found.clear(); //clearing from the old list
-
+    
     int i = -1, next_index = 0, count_cycles;
     while(++i >= 0 && next_index != -1){
         next_index = -1;
@@ -591,28 +588,24 @@ std::deque<Book*> Utilities::search(std::deque<Book*>& data, std::string word){
                 unsigned long int* temp_mid = new unsigned long int(mid);
           
                 if(toLowerCase(word) == toLowerCase(title)){
-                    std::cout   << "\nThe word searched: " << word  << " "
-                                << "\n\nThe words Found: " << std::endl;
-
+                    std::cout   << "\nThe word searched: " << word << std::endl;
+ 
                 // checking if first there are words alike
-                while(toLowerCase(word) == toLowerCase(string_splitter((*data.at(mid)).get_title(), " ")[i])){
-                    retrieve_title(mid,i);    
+                while(toLowerCase(word) == retrieve_title(mid,i)){
                     // making sure that it does not go out of bounds
                     if(mid > 0){ --mid; }
                     else       { break; }            
                 }
-                
-                
+                ++mid;
                 // checking the word if equal by incrementing after mid
-                while(toLowerCase(word) == toLowerCase(string_splitter((*data.at(++(*temp_mid))).get_title(), " ")[i]) ){
-
-                    retrieve_title((*temp_mid),i);
+                while(toLowerCase(word) == retrieve_title(++(*temp_mid),i) ){ 
+                     // keeping count of the object found 
+                
                 }
-
-
+                --(*temp_mid);
 // ----------------------------------------------- TEST AREA ------------------------------------------------------------
 // --------------------- Creating a set in order to eliminate all the duplicates ----------------------------------------
-                for(unsigned int i= mid; i<= (*temp_mid) - 1; i++){
+                for(unsigned int i= mid; i<= (*temp_mid); i++){
                             books_found[(*data[i]).get_isbn()] = (data[i]);
                     }
                 //-------- converting back to deque -------------
