@@ -10,6 +10,7 @@
 void Utilities::start()
 {
 
+    
     int choice;
     std::cout << "\n---------------------------------------" << std::endl;
     std::cout << "|   Welcome to the Library System!    |" << std::endl;
@@ -131,7 +132,8 @@ void Utilities::increase_Books(){
     
     std::cout << "\nTo go back type ====> 0" << std::endl;
     std::cout << "\nPlease insert the word of the Book:> ";
-    std::cin >> word;
+    std::cin.ignore();
+    std::getline(std::cin,word);
 
   if(word == "0"){
         start();
@@ -213,8 +215,9 @@ void Utilities::decreasement_Books(){
     int index; //index input in order to get the bok from the data structure 
    
     std::cout << "\nTo go back type ====> 0" << std::endl;
-    std::cout << "\nPlease insert the Book index:> ";
-    std::cin >> word;
+    std::cout << "\nPlease insert the Book name:> ";
+    std::cin.ignore();
+    std::getline(std::cin,word);
 
     if(word == "0"){
         start();
@@ -225,7 +228,7 @@ void Utilities::decreasement_Books(){
 
     if(max_size > 0){
 
-            std::cout << "\nPlease Insert the book:> ";
+            std::cout << "\nPlease Insert the book index:> ";
             std::cin >> index;
             
         while(index > max_size){
@@ -256,8 +259,9 @@ void Utilities::decreasement_Books(){
 
     if(total <=0){
 
-        book_data.erase(book_data.begin() + (index - 1));
-        std::cout << "Has been Deleted " << std::endl;
+        book_data.erase(titles_found.begin() + (index - 1));
+        delete titles_found.at(index - 1);
+        book_data.shrink_to_fit();
 
     }else{
 
@@ -608,10 +612,11 @@ std::deque<Book*> Utilities::search(std::deque<Book*>& data, std::string word){
                 for(unsigned int i= mid; i<= (*temp_mid); i++){
                             books_found[(*data[i]).get_isbn()] = (data[i]);
                     }
+                // //-------- converting back to deque -------------
                 //-------- converting back to deque -------------
-                for (auto k = books_found.begin();k != books_found.end();k++){
-                        titles_found.push_back(k->second);
-                    }
+                // for (auto k = books_found.begin();k != books_found.end();k++){
+                //         titles_found.push_back(k->second);
+                //     }
  // ---------------------------------------------------------------------------------------------------------------------
                 delete temp_mid;//releasing memory 
                 
@@ -622,7 +627,7 @@ std::deque<Book*> Utilities::search(std::deque<Book*>& data, std::string word){
                       std::cout  << counter <<  " " << (*(book->second)).get_title() << std::endl;
                       counter++;
                     }
-                count_cycles = i == 0 ? titles_found.size() : count_cycles;
+                count_cycles = i == 0 ? books_found.size() : count_cycles;
                 return true;
                 
              }
@@ -651,7 +656,7 @@ std::deque<Book*> Utilities::search(std::deque<Book*>& data, std::string word){
                 }
             }
             if(choice == "0"){ break; }
-        }else if(titles_found.size() > 0){
+        }else if(books_found.size() > 0){
             
             if(next_index == 0 && i == 0){
             
@@ -668,11 +673,15 @@ std::deque<Book*> Utilities::search(std::deque<Book*>& data, std::string word){
                     if(choice != "1" && choice != "0")
                     std::cout << "\nWRONG INPUT, TRY AGAIN!" <<std::endl;  
                 }
-                if( choice == "1" ){ return titles_found; }
-            }else if( next_index == -1 ){
-                if(titles_found.size() > count_cycles){
+                if( choice == "1" ){ 
+                //-------- converting back to deque -------------
+                for (auto k = books_found.begin();k != books_found.end();k++){ titles_found.push_back(k->second); }
 
-                    std::cout << "\nI HAVE FOUND " << std::to_string(titles_found.size() - count_cycles) << " MORE" << std::endl;
+                    return titles_found; }
+            }else if( next_index == -1 ){
+                if(books_found.size() > count_cycles){
+
+                    std::cout << "\nI HAVE FOUND " << std::to_string(books_found.size() - count_cycles) << " MORE" << std::endl;
 
                 }else{ std::cout << "\nNOT MORE WORDS WERE FOUND!"; }
                 break;
@@ -683,6 +692,8 @@ std::deque<Book*> Utilities::search(std::deque<Book*>& data, std::string word){
             break;
         }
     }
+     //-------- converting back to deque -------------
+    for (auto k = books_found.begin();k != books_found.end();k++){ titles_found.push_back(k->second); }
     return titles_found;
   
 }

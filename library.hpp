@@ -32,8 +32,10 @@ public:
         isbn = isbn_;
         quantity = quantity_;
     }
-
     Book(){};
+    ~Book(){
+        std::cout << "\nIT HAS BEEN DELETED " << std::endl;
+    };
     // ------------------ GETTER METHODS ---------------------
     // method which returns the title
     std::string get_title() { return title; }
@@ -47,7 +49,6 @@ public:
     // method which returns the quantity
     int get_quantity() { return quantity; }
 
-    // void setQty(int num);
     // --------------------------------------------------------
 };
 
