@@ -87,17 +87,13 @@ public:
      std::deque<Book*> titles_found; //WHere the found books will finish
     int total;
     bool exit = false;
-    
-
- 
-protected:
-   
+       
     // ----------------- SETTER METHODS --------------------------
     // Setting the new book
-    void set_newBook(std::string title, std::string authors, std::string isbn, int quantity)
+    void set_newBook(std::deque<Book*>& data,std::string title, std::string authors, std::string isbn, int quantity)
     {
         Book* book = new Book(title, authors, isbn, quantity);
-        book_data.push_back(book);
+        data.push_back(book);
     }
     // incresing quantity of the book
 
@@ -123,8 +119,3 @@ protected:
 };
 
 #endif
-
-    //   Book* book = new Book(data[0], data[1], data[2], stoi(data[3]));
-                        // book_data.push_back(book));
-
-                        // while(index > max_size || index < 0 )

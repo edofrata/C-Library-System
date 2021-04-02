@@ -4,8 +4,6 @@
 #include <limits>
 #include <algorithm>
 #include <unordered_map>
-#include <set>
-#include <unordered_set>
 // ------------------------ Main menu a new Book Method -----------------------
 void Utilities::start()
 {
@@ -91,7 +89,7 @@ void Utilities::adding_newBook()
         // ---------------------------------------------
     } while (std::cin.fail());
     // adding the book to the data structure
-    set_newBook(title, authors, isbn, quantity);
+    set_newBook(book_data,title, authors, isbn, quantity);
 
     int re_choice;
     std::cout << "BOOK ADDED!" << std::endl;
@@ -308,7 +306,7 @@ void Utilities::searching_book(){
 
     
     quick_sorting(book_data, 0, book_data.size() - 1, 0);
-
+    print_books();
     std::cout << "\nTo exit type ====> 0" << std::endl;
     std::cout<< "\nWhich book would you like to search?" << std::endl;
     std::cout << "Please insert the word:> ";
@@ -353,22 +351,6 @@ std::vector<std::string> Utilities::string_splitter(std::string line, std::strin
     return vec;
 }
 
-//    std::vector<std::string> vector_strings;
-//     std::string word;
-//     size_t pos = 0;
-
-//     while ((pos = line.find(delimeter)) != std::string::npos)
-//     {
-//         word = line.substr(0, pos);
-
-//         vector_strings.push_back(word);
-
-//         line.erase(0, pos + delimeter.length());
-//     }
-
-//     // adding to the vector the string passed
-//     vector_strings.push_back(line);
-//     return vector_strings;
 // -----------------------------------------------------------------------
 
 // ------------------------- File reader ---------------------------------
@@ -448,7 +430,7 @@ void Utilities::print_books(){
      std::cout << "| " << i + 1 << "| " << (*book_data.at(i)).get_title() << std::endl;
 
     }
-
+    
 }
 // |||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
 // ----------------toLowerCase method -------------------------
@@ -612,11 +594,6 @@ std::deque<Book*> Utilities::search(std::deque<Book*>& data, std::string word){
                 for(unsigned int i= mid; i<= (*temp_mid); i++){
                             books_found[(*data[i]).get_isbn()] = (data[i]);
                     }
-                // //-------- converting back to deque -------------
-                //-------- converting back to deque -------------
-                // for (auto k = books_found.begin();k != books_found.end();k++){
-                //         titles_found.push_back(k->second);
-                //     }
  // ---------------------------------------------------------------------------------------------------------------------
                 delete temp_mid;//releasing memory 
                 
