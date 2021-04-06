@@ -126,7 +126,7 @@ void Utilities::increase_Books(){
     std::string word; // word to be searched by the user
     std::string final_choice; // the final choice if no wrod has been found
     encapsulated_sorting(book_data); // the sorting and shuffling data structure
-    int index; //index input in order to get the bok from the data structure 
+    unsigned int index; //index input in order to get the bok from the data structure 
     
     std::cout << "\nTo go back type ====> 0" << std::endl;
     std::cout << "\nPlease insert the word of the Book:> ";
@@ -168,7 +168,7 @@ void Utilities::increase_Books(){
     set_quantityBook(titles_found, index - 1, quantity);
 
     std::cout << "\n|||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||" << std::endl;
-    std::cout <<  (*titles_found.at(index - 1)).get_title() << " " << "Has Been incremented of: " << quantity << std::endl;
+    std::cout << "\n" <<  (*titles_found.at(index - 1)).get_title() << " " << "Has Been incremented of: " << quantity << std::endl;
     std::cout <<"\nAFTER INCREMENT: " << std::endl;
     std::cout << "Title:      " <<  (*titles_found.at(index - 1)).get_title()    << std::endl;
     std::cout << "Author(s):  " <<  (*titles_found.at(index - 1)).get_authors()  << std::endl;
@@ -210,7 +210,7 @@ void Utilities::decreasement_Books(){
     std::string word; // word to be searched by the user
     std::string final_choice; // the final choice if no wrod has been found
     encapsulated_sorting(book_data); // the sorting and shuffling data structure
-    int index; //index input in order to get the bok from the data structure 
+    unsigned int index; //index input in order to get the bok from the data structure 
    
     std::cout << "\nTo go back type ====> 0" << std::endl;
     std::cout << "\nPlease insert the Book name:> ";
@@ -255,7 +255,7 @@ void Utilities::decreasement_Books(){
 
     set_decrementBook(titles_found, index - 1, quantity);
 
-    if(total <=0){
+    if(total <= 0){
 
         book_data.erase(titles_found.begin() + (index - 1));
         delete titles_found.at(index - 1);
@@ -383,9 +383,9 @@ void Utilities::file_reader()
                     line.c_str();
                     if (line != "")
                     {
-                        // splitting the data by the tab which in ASCII is (9)
+                        // ------------ splitting the data by the tab which in ASCII is (9) ---------
                         std::vector<std::string> data = string_splitter(line, std::string(1, 9));
-                        //    Creating the object
+                        // ----------- Creating the object ---------------
                         Book* book = new Book(data[0], data[1], data[2], stoi(data[3]));
                         book_data.push_back(book);
                         book_data.shrink_to_fit();
@@ -425,7 +425,7 @@ std::deque<Book*> Utilities::encapsulated_sorting(std::deque<Book*>& data){
 void Utilities::print_books(){
 
 
-    for(int i = 0; i < book_data.size(); i ++){
+    for(unsigned long i = 0; i < book_data.size(); i++){
 
      std::cout << "| " << i + 1 << "| " << (*book_data.at(i)).get_title() << std::endl;
 
@@ -538,7 +538,8 @@ std::deque<Book*> Utilities::search(std::deque<Book*>& data, std::string word){
     std::unordered_map<std::string, Book*> books_found; //Unordered hash map which will hold the books found
     titles_found.clear(); //clearing from the old list
     
-    int i = -1, next_index = 0, count_cycles;
+    int i = -1, next_index = 0;
+    unsigned long int count_cycles;
     while(++i >= 0 && next_index != -1){
         next_index = -1;
 
@@ -549,7 +550,7 @@ std::deque<Book*> Utilities::search(std::deque<Book*>& data, std::string word){
         quick_sorting(data, 0, data.size() - 1, i);
 
         // ----------------START--------------------
-        std::function<bool(int left, int right)> binary_search = [&]( int l, int r){
+        std::function<bool(int left, int right)> binary_search = [&]( unsigned long int l, unsigned long int r){
 
             unsigned long int mid = l + (r - l) / 2;
             std::string title = retrieve_title(mid, i);
@@ -589,8 +590,7 @@ std::deque<Book*> Utilities::search(std::deque<Book*>& data, std::string word){
                 
                 }
                 --(*temp_mid);
-// ----------------------------------------------- TEST AREA ------------------------------------------------------------
-// --------------------- Creating a set in order to eliminate all the duplicates ----------------------------------------
+// --------------------- Using unordered map in order to eliminate all the duplicates ----------------------------------------
                 for(unsigned int i= mid; i<= (*temp_mid); i++){
                             books_found[(*data[i]).get_isbn()] = (data[i]);
                     }
