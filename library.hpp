@@ -69,8 +69,6 @@ public:
 // ----------------------------------------------------------
 
 // ------------------ ALGORITHM TECHNIQUES-----------------------------
-    // partition method
-    int partition(std::deque<Book>& data, int left, int right, int index);
     // Sorting method
     void quick_sorting(std::deque<Book*>& data, long int left, long int right, unsigned int index);
     // searching method
@@ -84,8 +82,8 @@ public:
     std::vector<std::string> string_splitter(std::string line, std::string delimiter);
     // deque of objects which will store all the books
     std::deque<Book*> book_data;
-     std::deque<Book*> titles_found; //WHere the found books will finish
-    int total;
+    std::deque<Book*> titles_found; //WHere the found books will finish
+    int total = 0;
     bool exit = false;
        
     // ----------------- SETTER METHODS --------------------------
@@ -99,7 +97,7 @@ public:
 
     int set_quantityBook(std::deque<Book*>& data, int index, int &quantity)
     {
-        int total = (*data.at(index)).get_quantity() + quantity;
+        total = (*data.at(index)).get_quantity() + quantity;
         
         (*data.at(index)).quantity = total;
 

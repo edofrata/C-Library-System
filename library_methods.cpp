@@ -139,12 +139,12 @@ void Utilities::increase_Books(){
             search(book_data, word);
             unsigned int max_size = titles_found.size();
     if(max_size > 0){
-            std::cout << "\nPlease Insert the book:> ";
+            std::cout << "\nPlease Insert the book index:> ";
             std::cin >> index;
 
         while(index > max_size){
             std::cout << "THERE IS NOT SUCH INDEX!" << std::endl;
-            std::cout << "\nPlease Insert the book:> ";
+            std::cout << "\nPlease Insert the book index:> ";
             std::cin >> index;
         }
 
@@ -211,7 +211,8 @@ void Utilities::decreasement_Books(){
     std::string final_choice; // the final choice if no wrod has been found
     encapsulated_sorting(book_data); // the sorting and shuffling data structure
     unsigned int index; //index input in order to get the bok from the data structure 
-   
+  
+
     std::cout << "\nTo go back type ====> 0" << std::endl;
     std::cout << "\nPlease insert the Book name:> ";
     std::cin.ignore();
@@ -253,12 +254,16 @@ void Utilities::decreasement_Books(){
 
     }
 
+    std::cout << "THIS IS THE TOTAL: " << total << std::endl;
+    total = 0;
+    std::cout << "THIS IS THE TOTAL BEFORE: " << total << std::endl;
     set_decrementBook(titles_found, index - 1, quantity);
-
+    std::cout << "THIS IS THE NEW TOTAL: " << total << std::endl;
     if(total <= 0){
 
+        Book* holder = titles_found.at(index - 1);
         book_data.erase(titles_found.begin() + (index - 1));
-        delete titles_found.at(index - 1);
+        delete holder;
         book_data.shrink_to_fit();
 
     }else{
@@ -465,6 +470,7 @@ void Utilities::quick_sorting(std::deque<Book*>& data, long int left, long int r
                     { pivot += " " + *iterator_pivot; }
                 }    
         // -------- creating a holder for partioning word ----------
+
         while (i <= j) {
 
             

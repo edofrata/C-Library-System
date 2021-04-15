@@ -25,7 +25,6 @@ test_cases : test_cases.o
 test_cases.o : test_cases.cpp catch.hpp library_main.cpp
 	$(CXX) $(CXXFLAGS) -c test_cases.cpp
 
-
 # creating a PHONY target as the clean method is
 .PHONY: clean
 clean :
